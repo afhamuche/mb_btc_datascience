@@ -22,7 +22,7 @@ def bool_list(amount, cols):
 
 with open(filename,'r', newline='') as historical:
     header = next(csv.reader(historical))
-    bool_header = ['tid', 'amount', 50, 100, 200, 500, 1500, 3000, 5000, 10000, 20000, 0]
+    bool_header = ['tid', 'volume', 50, 100, 200, 500, 1500, 3000, 5000, 10000, 20000, 0]
     fswriter = open(fsfile, 'w', newline='')
     obj = csv.writer(fswriter)
     obj.writerow(bool_header)
