@@ -25,10 +25,16 @@ def get_bool(aType):
 
 def get_intervals(maximum, average, minimum, interval):
     aList = []
-    intervals = (int(maximum - minimum) // interval) + 2
+    intervals = maximum - minimum
+    intervals = intervals / average
+    intervals = '{:.6f}'.format(intervals/interval)
+    intervals = float(intervals)
 
-    for i in range(intervals):
-        aList.append(int((i*interval) - average + minimum))
+
+    for i in range(interval):
+        tmp = '{:.6f}'.format(\
+            ((i+1)*intervals)-(intervals*0.5*interval))
+        aList.append(float(tmp))
     return aList
 
 filename = "historical_1665783247-1665178447.csv"
@@ -77,5 +83,6 @@ with open(pricesfile, 'w', newline='') as prices:
         aList.append(buy[i])
         aList.append(aprice)
         aList.append(volume[i])
-        aList += bool_list(int(aprice - average), intervals)
+        tmp = '{0:.6f}'.format((aprice - average)/average)
+        aList += bool_list(float(tmp), intervals)
         pricesobj.writerow(aList)
