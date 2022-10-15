@@ -38,4 +38,3 @@ for x in range(2):
                     aList[placement] += 1
 
             histogramobj.writerow(aList)
-
