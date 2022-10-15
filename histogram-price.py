@@ -29,8 +29,6 @@ for x in range(2):
 
             for row in readobj:
                 aBool = row[0] == "True"
-                print(aBool)
-                print("NOT A BOOL " + str(not aBool))
                 tmpList = row[3:]
                 if aBool and awtype == 'w':
                     placement = tmpList.index('True')
