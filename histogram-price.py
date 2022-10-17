@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 
 import csv
+import sys
 
-filename = "historical_1665783247-1665178447.csv"
+args = len(sys.argv)
+if args>1:
+    filename = sys.argv[1]
+else:
+    filename = "historical_1665783247-1665178447.csv"
+sys.stdout.write(filename + '\n')
+
 pricefile = "price_" + filename
+sys.stdout.write(pricefile + '\n')
 
+histogramfile = 'histogram_' + pricefile
 
 for x in range(2):
     if x==0:
@@ -12,7 +21,7 @@ for x in range(2):
     else:
         awtype = 'a'
 
-    with open('histogram_' + pricefile, awtype, newline='') as histogram:
+    with open(histogramfile, awtype, newline='') as histogram:
         histogramobj = csv.writer(histogram)
 
         with open(pricefile, 'r', newline='') as readfile:
@@ -38,3 +47,4 @@ for x in range(2):
                     aList[placement] += 1
 
             histogramobj.writerow(aList)
+sys.stdout.write(histogramfile + '\n')
