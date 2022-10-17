@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+
 import requests
 import json
 import datetime
 import csv
+import sys
 
 def gettrades(time0, time1):
     trades = requests.get(trades_url + '/' + str(time0) + '/' + str(time1))
@@ -45,4 +48,5 @@ with open(filename + '.csv', 'w', newline='') as historical:
 
             writer.writerow(db_insert)
         time += interval + 1
-        print(str(time) + " " + str(timestamp - time))
+
+sys.stdout.write(filename + '.csv\n')
