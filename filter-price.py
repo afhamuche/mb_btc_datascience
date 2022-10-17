@@ -3,6 +3,7 @@
 import csv
 import pandas
 import numpy
+import sys
 
 def bool_list(amount, cols):
     length = len(cols)
@@ -37,7 +38,13 @@ def get_intervals(maximum, average, minimum, interval):
         aList.append(float(tmp))
     return aList
 
-filename = "historical_1665783247-1665178447.csv"
+args = len(sys.argv)
+if args>1:
+    filename = sys.argv[1]
+else:
+    filename = "historical_1665783247-1665178447.csv"
+sys.stdout.write(filename + '\n')
+
 pricesfile = "price_" + filename
 
 with open(pricesfile, 'w', newline='') as prices:
@@ -86,3 +93,6 @@ with open(pricesfile, 'w', newline='') as prices:
         tmp = '{0:.6f}'.format((aprice - average)/average)
         aList += bool_list(float(tmp), intervals)
         pricesobj.writerow(aList)
+
+sys.stdout.write(pricesfile)
+sys.stdout.write('\n')
