@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 
 import csv
-import math, copy
-import numpy as np
+import sys
 
-filename = "historical_1665696314-1665005114.csv"
+args = len(sys.argv)
+if args>1:
+    filename = sys.argv[1]
+else:
+    filename = "historical_1665783247-1665178447.csv"
+
 histogram = 'histogram_' + filename
 
-#Function to calculate the cost
 def compute_cost(x, y, w, b):
 
-    m = x.shape[0]
+    m = len(x)
     cost = 0
 
     for i in range(m):
@@ -21,19 +24,7 @@ def compute_cost(x, y, w, b):
     return total_cost
 
 def compute_gradient(x, y, w, b):
-    """
-    Computes the gradient for linear regression
-    Args:
-    x (ndarray (m,)): Data, m examples
-    y (ndarray (m,)): target values
-    w,b (scalar)    : model parameters
-    Returns
-    dj_dw (scalar): The gradient of the cost w.r.t. the parameters w
-    dj_db (scalar): The gradient of the cost w.r.t. the parameter b
-    """
-
-    # Number of training examples
-    m = x.shape[0]
+    m = len(x)
     dj_dw = 0
     dj_db = 0
 
@@ -48,83 +39,77 @@ def compute_gradient(x, y, w, b):
 
     return dj_dw, dj_db
 
-def gradient_descent(x, y, w_in, b_in, alpha, num_iters, cost_function, gradient_function):
-    """
-    Performs gradient descent to fit w,b. Updates w,b by taking
-    num_iters gradient steps with learning rate alpha
-
-    Args:
-    x (ndarray (m,))  : Data, m examples
-    y (ndarray (m,))  : target values
-    w_in,b_in (scalar): initial values of model parameters
-    alpha (float):     Learning rate
-    num_iters (int):   number of iterations to run gradient descent
-    cost_function:     function to call to produce cost
-    gradient_function: function to call to produce gradient
-
-    Returns:
-    w (scalar): Updated value of parameter after running gradient descent
-    b (scalar): Updated value of parameter after running gradient descent
-    J_history (List): History of cost values
-    p_history (list): History of parameters [w,b]
-    """
-
-    w = copy.deepcopy(w_in) # avoid modifying global w_in
-    # An array to store cost J and w's at each iteration primarily for graphing later
-    J_history = []
-    p_history = []
+def gradient_descent(x, y, w_in, b_in, alpha, num_iters):
     b = b_in
     w = w_in
 
     for i in range(num_iters):
-        # Calculate the gradient and update the parameters using gradient_function
-        dj_dw, dj_db = gradient_function(x, y, w , b)
-
-        # Update Parameters using equation (3) above
+        #print("Iter[{i}]: w= {w} & b= {b}")
+        dj_dw, dj_db = compute_gradient(x, y, w , b)
         b = b - alpha * dj_db
         w = w - alpha * dj_dw
+        print("Iter[{}]: w= {} & b= {}".format(i, w, b))
 
-        # Save cost J at each iteration
-        if i<100000:      # prevent resource exhaustion
-            J_history.append(cost_function(x, y, w, b))
-            p_history.append([w,b])
-        # Print cost every at intervals 10 times or as many iterations if < 10
-        if i% math.ceil(num_iters/10) == 0:
-            print(f"Iteration {i:4}: Cost {J_history[-1]:0.2e} ",
-                f"dj_dw: {dj_dw: 0.3e}, dj_db: {dj_db: 0.3e}  ",
-                f"w: {w: 0.3e}, b:{b: 0.5e}")
+    return w, b
 
-    return w, b, J_history, p_history #return w and J,w history for graphing
 
+sys.stdout.write(histogram + '\n')
 with open(histogram, 'r') as ifile:
     histogramobj = csv.reader(ifile)
 
+    '''
     # Load our data set
     buy_x_train = np.array(next(histogramobj))   #features
     buy_y_train = np.array(next(histogramobj))   #target value
     sell_x_train = np.array(next(histogramobj))
     sell_y_train = np.array(next(histogramobj))
 
-    buy_x_train = np.asarray(buy_x_train, dtype=int)
+    buy_x_train = np.asarray(buy_x_train, dtype=float)
     buy_y_train = np.asarray(buy_y_train, dtype=int)
     buy_x_train[-1] = 1000000
     sell_y_train = np.asarray(sell_y_train, dtype=int)
-    sell_x_train = np.asarray(sell_x_train, dtype=int)
+    sell_x_train = np.asarray(sell_x_train, dtype=float)
     sell_x_train[-1] = 1000000
+    '''
 
-    for i in range(2):
+    buy_x_train = next(histogramobj)
+    buy_y_train = next(histogramobj)
+    sell_x_train = next(histogramobj)
+    sell_y_train = next(histogramobj)
+
+    for i in range(len(buy_x_train)):
+        buy_x_train[i] = int(buy_x_train[i])
+        buy_y_train[i] = int(buy_y_train[i])
+        sell_x_train[i] = int(sell_x_train[i])
+        sell_y_train[i] = int(sell_y_train[i])
+    buy_x_train[-1] = 58000
+
+    for i in range(3):
         if i <1:
+            print("buy (x) vs sell (y)")
+            x_train = buy_y_train
+            y_train = sell_y_train
+            in_usr = input()
+        elif i<2:
+            print("bool (x) vs buy (y)")
             x_train = buy_x_train
             y_train = buy_y_train
+            in_usr = input()
         else:
-            x_train = sell_x_train
+            print("bool (x) vs sell (y)")
+            x_train = buy_x_train
             y_train = sell_y_train
+            in_usr = input()
         # initialize parameters
         w_init = 0
         b_init = 0
         # some gradient descent settings
-        iterations = 10000
-        tmp_alpha = 1.0e-2
+        iterations = 8
+        tmp_alpha = 1.0e-0
         # run gradient descent
-        w_final, b_final, J_hist, p_hist = gradient_descent(x_train, y_train, w_init, b_init, tmp_alpha, iterations, compute_cost, compute_gradient)
+        w_final, b_final = \
+            gradient_descent(x_train, y_train, w_init, b_init, \
+            tmp_alpha, iterations)# compute_cost, compute_gradient)
+        print("w_final = " + str(w_final))
+        print("b_final = " + str(b_final))
         print(f"(w,b) found by gradient descent: ({w_final:8.4f},{b_final:8.4f})")
