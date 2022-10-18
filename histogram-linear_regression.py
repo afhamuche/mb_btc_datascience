@@ -7,7 +7,7 @@ args = len(sys.argv)
 if args>1:
     filename = sys.argv[1]
 else:
-    filename = "historical_1665783247-1665178447.csv"
+    filename = input("filename.csv = ")
 
 histogram = 'histogram_' + filename
 
@@ -49,6 +49,8 @@ def gradient_descent(x, y, w_in, b_in, alpha, num_iters):
         b = b - alpha * dj_db
         w = w - alpha * dj_dw
         print("Iter[{}]: w= {} & b= {}".format(i, w, b))
+        total_cost = compute_cost(x, y, w, b)
+        print("Total cost: {}".format(total_cost))
 
     return w, b
 
@@ -56,7 +58,7 @@ def gradient_descent(x, y, w_in, b_in, alpha, num_iters):
 sys.stdout.write(histogram + '\n')
 with open(histogram, 'r') as ifile:
     histogramobj = csv.reader(ifile)
-    
+
     buy_x_train = next(histogramobj)
     buy_y_train = next(histogramobj)
     sell_x_train = next(histogramobj)
@@ -74,27 +76,26 @@ with open(histogram, 'r') as ifile:
             print("buy (x) vs sell (y)")
             x_train = buy_y_train
             y_train = sell_y_train
-            in_usr = input()
         elif i<2:
             print("bool (x) vs buy (y)")
             x_train = buy_x_train
             y_train = buy_y_train
-            in_usr = input()
         else:
             print("bool (x) vs sell (y)")
             x_train = buy_x_train
             y_train = sell_y_train
-            in_usr = input()
-        # initialize parameters
+
         w_init = 0
         b_init = 0
         # some gradient descent settings
-        iterations = 8
-        tmp_alpha = 1.0e-0
-        # run gradient descent
+        #iterations = 10000
+        #tmp_alpha = 1.0e-8
+        iterations = int(input("iterations: "))
+        tmp_alpha = float(input("alpha: "))
+
         w_final, b_final = \
             gradient_descent(x_train, y_train, w_init, b_init, \
             tmp_alpha, iterations)# compute_cost, compute_gradient)
         print("w_final = " + str(w_final))
         print("b_final = " + str(b_final))
-        print(f"(w,b) found by gradient descent: ({w_final:8.4f},{b_final:8.4f})")
+        print(f"(w,b) found by gradient descent: ({w_final:.4f},{b_final:.4f})")
