@@ -56,22 +56,7 @@ def gradient_descent(x, y, w_in, b_in, alpha, num_iters):
 sys.stdout.write(histogram + '\n')
 with open(histogram, 'r') as ifile:
     histogramobj = csv.reader(ifile)
-
-    '''
-    # Load our data set
-    buy_x_train = np.array(next(histogramobj))   #features
-    buy_y_train = np.array(next(histogramobj))   #target value
-    sell_x_train = np.array(next(histogramobj))
-    sell_y_train = np.array(next(histogramobj))
-
-    buy_x_train = np.asarray(buy_x_train, dtype=float)
-    buy_y_train = np.asarray(buy_y_train, dtype=int)
-    buy_x_train[-1] = 1000000
-    sell_y_train = np.asarray(sell_y_train, dtype=int)
-    sell_x_train = np.asarray(sell_x_train, dtype=float)
-    sell_x_train[-1] = 1000000
-    '''
-
+    
     buy_x_train = next(histogramobj)
     buy_y_train = next(histogramobj)
     sell_x_train = next(histogramobj)
