@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 
 import csv
+import sys
 
-filename = "historical_1665696314-1665005114.csv"
-intervals = 100
+args = len(sys.argv)
+if args>1:
+    filename = sys.argv[1]
+else:
+    filename = "historical_1665783247-1665178447.csv"
 
-with open('histogram_' + filename, 'w') as histogram:
+histogramfile = 'histogram_' + filename
+
+with open(histogramfile, 'w') as histogram:
     histogramobj = csv.writer(histogram)
 
     ifile = 'buy_' + filename
@@ -25,4 +31,6 @@ with open('histogram_' + filename, 'w') as histogram:
                 aList[placement] += 1
 
             histogramobj.writerow(aList)
+        sys.stdout.write(ifile + '\n')
         ifile = 'sell_' + filename
+sys.stdout.write(histogramfile + '\n')
