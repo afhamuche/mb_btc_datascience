@@ -6,9 +6,9 @@ import pandas
 
 args = len(sys.argv)
 if args>1:
-    filename = sys.argv[1]
+    filename = str(sys.argv[1])
 else:
-    filename = input("Filename for historical dataset: ")
+    filename = str(input("Filename for historical dataset: "))
 
 ifile = "new_" + filename
 
@@ -47,7 +47,8 @@ with open(filename,'r', newline='') as historical:
 
             alist.append(price)
 
-            volume = float(data[index_volume])
+            volume = '{:.2f}'.format(float(data[index_volume]))
+            volume = float(volume)
 
             alist.append(volume)
 
