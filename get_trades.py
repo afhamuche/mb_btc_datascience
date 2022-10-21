@@ -23,16 +23,25 @@ def getvolume(amount, price):
 coin = 'BTC'
 mb_api = 'https://www.mercadobitcoin.net/api/'
 trades_url = mb_api + coin + '/trades'
-timestamp = int(datetime.datetime.now().timestamp())
-days = int(input("Enter days back to fetch: "))#10
+date_now = datetime.datetime.now()
+timestamp = int(date_now.timestamp())
+
+args = len(sys.argv)
+
+if args == 3:
+    days = int(sys.argv[1])
+    interval = int(sys.argv[2])
+else:
+    days = int(input("Enter days back to fetch: "))#10
+    interval = int(input("Enter interval (seconds [def. 500]): ")) #500 seconds
+
 time = timebackdays(timestamp, days)
-interval = int(input("Enter interval (seconds [def. 500]): ")) #500 #seconds
-filename = 'historical_' + str(timestamp) + '-' + str(time)
+filename = 'trades-' + date_now.strftime("%Y%m%d") + '-' + str(days) + '.csv'
 
 keys = ['amount', 'date', 'price', 'tid', 'type', 'satoshi', 'volume']
 db_insert = []
 
-with open(filename + '.csv', 'w', newline='') as historical:
+with open(filename, 'w', newline='') as historical:
 
     writer = csv.writer(historical)
     writer.writerow(keys)
@@ -49,4 +58,4 @@ with open(filename + '.csv', 'w', newline='') as historical:
             writer.writerow(db_insert)
         time += interval + 1
 
-sys.stdout.write(filename + '.csv\n')
+sys.stdout.write(filename + '\n')
