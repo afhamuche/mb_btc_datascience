@@ -5,11 +5,11 @@ import re
 
 args = len(sys.argv)
 if args>1:
-    filename = str(sys.argv[1])
+    bt_file = str(sys.argv[1])
 else:
-    filename = str(input("Filename for trades dataset: "))
+    bt_file = str(input("Filename for bigtable_trades dataset: "))
 
-bt_file = "bigtable_" + filename
+filename = bt_file[9:]
 csv_path = "./csv_files/"
 bt_path = csv_path + "bigtable_trades/"
 tally_file = "tally.csv"
@@ -41,3 +41,5 @@ with open(tally_file, 'a', newline='') as tally:
     tally_write = csv.writer(tally)
     data = [date, span, count0, count1, count2]
     tally_write.writerow(data)
+
+sys.stdout.write('Appended data to tally.csv')
