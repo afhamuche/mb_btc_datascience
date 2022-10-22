@@ -70,4 +70,5 @@ with open(csv_path + filename,'r', newline='') as historical:
             alist.append(volume)
             ifile_write.writerow(alist)
 
-sys.stdout.write(str(ifile) + '\n')
+ifile = str(ifile)
+sys.stdout.write(ifile)
