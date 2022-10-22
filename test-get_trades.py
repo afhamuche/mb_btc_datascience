@@ -56,4 +56,4 @@ with open("./csv_files/" + filename, 'w', newline='') as historical:
             writer.writerow(db_insert)
         time += interval + 1
 
-sys.stdout.write(filename + '\n')
+sys.stdout.write(filename)
